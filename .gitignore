@@ -1,0 +1,47 @@
+# Compiled binaries
+bin/
+obj/
+*.exe
+*.o
+*.obj
+
+# Build artifacts
+*.dll
+*.so
+*.dylib
+*.a
+*.lib
+
+# Debug files
+*.pdb
+*.dSYM/
+
+# Database files (for testing)
+*.db
+test.db
+
+# IDE files
+.vscode/
+.vs/
+*.vcxproj*
+*.sln
+
+# OS generated files
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+
+# Temporary files
+*.tmp
+*.temp
+*~
+
+# Log files
+*.log
+
+# Test output files
+test_commands.txt

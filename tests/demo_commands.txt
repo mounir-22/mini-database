@@ -1,0 +1,29 @@
+// Test script for the Mini Database Engine
+// This file demonstrates the capabilities of our database
+
+// Test Cases:
+
+// 1. Basic INSERT operations
+insert 1 alice alice@example.com
+insert 2 bob bob@example.com
+insert 3 charlie charlie@example.com
+
+// 2. SELECT to view all data
+select
+
+// 3. Test duplicate key detection
+insert 1 duplicate duplicate@example.com
+
+// 4. Insert more data to test B-tree ordering
+insert 10 zoe zoe@example.com
+insert 5 david david@example.com
+insert 7 frank frank@example.com
+
+// 5. SELECT to see sorting
+select
+
+// 6. Meta commands
+.constants
+
+// 7. Exit
+.exit

@@ -1,0 +1,91 @@
+name: Build and Test Mini Database Engine
+
+on:
+  push:
+    branches: [ main, develop ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  build-linux:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - uses: actions/checkout@v4
+    
+    - name: Install dependencies
+      run: |
+        sudo apt-get update
+        sudo apt-get install -y build-essential
+        
+    - name: Build
+      run: make all
+      
+    - name: Test
+      run: make test
+      
+    - name: Validate build artifacts
+      run: |
+        ls -la bin/
+        file bin/minidb
+        
+  build-windows:
+    runs-on: windows-latest
+    
+    steps:
+    - uses: actions/checkout@v4
+    
+    - name: Set up MinGW
+      uses: msys2/setup-msys2@v2
+      with:
+        msystem: MINGW64
+        install: mingw-w64-x86_64-gcc mingw-w64-x86_64-make
+        
+    - name: Build with MinGW
+      shell: msys2 {0}
+      run: |
+        make all
+        
+    - name: Test with MinGW
+      shell: msys2 {0}
+      run: |
+        make test
+        
+  build-macos:
+    runs-on: macos-latest
+    
+    steps:
+    - uses: actions/checkout@v4
+    
+    - name: Install dependencies
+      run: |
+        brew install gcc make
+        
+    - name: Build
+      run: make all
+      
+    - name: Test
+      run: make test
+      
+  code-quality:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - uses: actions/checkout@v4
+    
+    - name: Install static analysis tools
+      run: |
+        sudo apt-get update
+        sudo apt-get install -y cppcheck valgrind clang-tidy
+        
+    - name: Run static analysis
+      run: |
+        cppcheck --enable=all --error-exitcode=1 src/
+        
+    - name: Build for memory testing
+      run: |
+        gcc -g -O0 -std=c99 -Iinclude -o bin/minidb-debug src/*.c
+        
+    - name: Memory leak check
+      run: |
+        echo -e "insert 1 test test@example.com\nselect\n.exit" | valgrind --leak-check=full --error-exitcode=1 ./bin/minidb-debug test.db
